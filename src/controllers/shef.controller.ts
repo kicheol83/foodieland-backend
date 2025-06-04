@@ -14,7 +14,7 @@ shefController.goHome = (req: Request, res: Response) => {
 
 shefController.getLogin = (req: Request, res: Response) => {
   try {
-    console.log("goLogin");
+    console.log("getLogin");
     res.send("Login Page");
   } catch (err) {
     console.log("Error. getLogin:", err);
@@ -23,10 +23,28 @@ shefController.getLogin = (req: Request, res: Response) => {
 
 shefController.getSignup = (req: Request, res: Response) => {
   try {
-    console.log("goSignup");
+    console.log("getSignup");
     res.send("Signup Page");
   } catch (err) {
     console.log("Error. getSignup:", err);
+  }
+};
+
+shefController.processLogin = (req: Request, res: Response) => {
+  try {
+    console.log("processLogin");
+    res.send("DONE");
+  } catch (err) {
+    console.log("Error. processLogin:", err);
+  }
+};
+
+shefController.processSignup = (req: Request, res: Response) => {
+  try {
+    console.log("processSignup");
+    res.send("DONE1");
+  } catch (err) {
+    console.log("Error. processSignup:", err);
   }
 };
 
