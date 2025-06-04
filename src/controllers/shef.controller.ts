@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { T } from "../libs/types/common";
+import MemberService from "../models/Member.service";
 
 const shefController: T = {};
 shefController.goHome = (req: Request, res: Response) => {
@@ -25,6 +26,5 @@ shefController.getSignup = (req: Request, res: Response) => {
     console.log("Error. getSignup:", err);
   }
 };
- 
 
 export default shefController;
