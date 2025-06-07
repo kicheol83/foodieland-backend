@@ -8,27 +8,27 @@ const shefController: T = {};
 shefController.goHome = (req: Request, res: Response) => {
   try {
     console.log("goHome");
-    res.send("Home Page");
+    res.send("home");
   } catch (err) {
-    console.log("Error. goHome:", err);
+    console.log("Error. home:", err);
   }
 };
 
 shefController.getLogin = (req: Request, res: Response) => {
   try {
     console.log("getLogin");
-    res.send("Login Page");
+    res.send("login");
   } catch (err) {
-    console.log("Error. getLogin:", err);
+    console.log("Error. login:", err);
   }
 };
 
 shefController.getSignup = (req: Request, res: Response) => {
   try {
     console.log("getSignup");
-    res.send("Signup Page");
+    res.send("signup");
   } catch (err) {
-    console.log("Error. getSignup:", err);
+    console.log("Error. signup:", err);
   }
 };
 
