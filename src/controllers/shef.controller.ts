@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
+import { LoginInput } from "../libs/types/member";
+import { MemberType } from "../libs/enums/member.enum";
+import { MemberInput } from "../libs/types/member";
 
 const shefController: T = {};
 shefController.goHome = (req: Request, res: Response) => {
@@ -30,22 +33,37 @@ shefController.getSignup = (req: Request, res: Response) => {
   }
 };
 
-shefController.processLogin = (req: Request, res: Response) => {
-  try {
-    console.log("processLogin");
-    res.send("DONE");
-  } catch (err) {
-    console.log("Error. processLogin:", err);
-  }
-};
+/** BSSR ADMINKA **/
 
-shefController.processSignup = (req: Request, res: Response) => {
+shefController.processSignup = async (req: Request, res: Response) => {
   try {
     console.log("processSignup");
-    res.send("DONE1");
+    console.log("body", req.body);
+
+    const newMember: MemberInput = req.body;
+    newMember.memberType = MemberType.SHEF || MemberType.ADMIN;
+
+    const memberService = new MemberService();
+    const result = await memberService.processSignup(newMember);
+
+    res.send(result);
   } catch (err) {
     console.log("Error. processSignup:", err);
   }
+
+  shefController.processLogin = async (req: Request, res: Response) => {
+    try {
+      console.log("processLogin");
+      console.log("body:", req.body);
+      const input: LoginInput = req.body;
+
+      const memberService = new MemberService();
+      const result = await memberService.processLogin(input);
+      res.send(result);
+    } catch (err) {
+      console.log("Error. processLogin:", err);
+    }
+  };
 };
 
 export default shefController;

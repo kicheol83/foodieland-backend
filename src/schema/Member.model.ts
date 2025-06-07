@@ -9,7 +9,7 @@ const memberSchema = new Schema(
       enum: MemberType,
       default: MemberType.USER,
     },
-
+    
     memberStatus: {
       type: String,
       enum: MemberStatus,
@@ -20,12 +20,20 @@ const memberSchema = new Schema(
       type: String,
       index: { unique: true, sparse: true },
       required: true,
+      match: [/^[a-zA-Z0-9_]{3,20}$/, "Invalid nickname format"],
     },
 
     memberPhone: {
       type: String,
       index: { unique: true, sparse: true },
       required: true,
+      match: [/^01[016789]-?\d{3,4}-?\d{4}$/, "Invalid Korean phone number"],
+    },
+    memberEmail: {
+      type: String,
+      index: { unique: true, sparse: true },
+      required: true,
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"],
     },
 
     memberPassword: {
@@ -34,21 +42,9 @@ const memberSchema = new Schema(
       required: true,
     },
 
-    memberImage: {
-      type: String,
-    },
-
-    memberEmail: {
-      type: String,
-    },
-
-    memberAddress: {
-      type: String,
-    },
-
-    memberDesc: {
-      type: String,
-    },
+    memberImage: { type: String },
+    memberAddress: { type: String },
+    memberDesc: { type: String },
   },
   { timestamps: true }
 );
