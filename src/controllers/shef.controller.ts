@@ -8,7 +8,7 @@ const shefController: T = {};
 shefController.goHome = (req: Request, res: Response) => {
   try {
     console.log("goHome");
-    res.send("home");
+    res.render("home");
   } catch (err) {
     console.log("Error. home:", err);
   }
@@ -17,7 +17,7 @@ shefController.goHome = (req: Request, res: Response) => {
 shefController.getLogin = (req: Request, res: Response) => {
   try {
     console.log("getLogin");
-    res.send("login");
+    res.render("login");
   } catch (err) {
     console.log("Error. login:", err);
   }
@@ -26,7 +26,7 @@ shefController.getLogin = (req: Request, res: Response) => {
 shefController.getSignup = (req: Request, res: Response) => {
   try {
     console.log("getSignup");
-    res.send("signup");
+    res.render("signup");
   } catch (err) {
     console.log("Error. signup:", err);
   }
