@@ -19,12 +19,17 @@ export enum Message {
   NO_MEMBER_NICK = "No member with that member nick!",
   WRONG_PASSWORD = "Wrong password, pleace try again!",
   IS_NOT_EMAIL = "Is not email",
+  MEMBER_TYPE_WRONG = "Member type wrong",
 }
 
 class Errors extends Error {
   public code: HttpCode;
   public message: Message;
 
+  static standard = {
+    code: HttpCode.INTERNAL_SERVER_ERROR,
+    message: Message.SOMETHING_WENT_WRONG,
+  };
   constructor(statusCode: HttpCode, statusMessage: Message) {
     super();
     this.code = statusCode;
