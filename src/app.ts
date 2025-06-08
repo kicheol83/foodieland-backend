@@ -3,16 +3,17 @@ import path from "path";
 import router from "./router";
 import routerAdmin from "./routerAdmin";
 import morgan from "morgan";
-import {MORGAN_FORMAT} from "./libs/config"
+import cookieParser from "cookie-parser";
+import { MORGAN_FORMAT } from "./libs/config";
 
 /* 1-ENTRANCE*/
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("./uploads"));
 app.use(express.json());
-app.use(
-  morgan(MORGAN_FORMAT)
-);
+app.use(cookieParser());
+app.use(morgan(MORGAN_FORMAT));
 /* 2-SESSIONS*/
 
 /* 3-VIEWS*/

@@ -61,16 +61,14 @@ class MemberService {
   public async processSignup(input: MemberInput): Promise<Member> {
     const exist = await this.memberModel
       .findOne({
-        $or: [
-          { memberType: MemberType.SHEF },
-          { memberType: MemberType.ADMIN },
-        ],
+        memberType: MemberType.SHEF,
       })
       .exec();
 
     if (exist) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     const salt = await bcrypt.genSalt();
     input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
+    console.log("password:", input.memberPassword);
 
     try {
       const result = await this.memberModel.create(input);
