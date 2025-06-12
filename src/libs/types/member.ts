@@ -1,5 +1,6 @@
 import { ObjectId } from "mongoose";
 import { MemberStatus, MemberType } from "../enums/member.enum";
+import { Cookie } from "@types/express-session";
 
 export interface Member {
   _id: ObjectId;
@@ -36,6 +37,13 @@ export interface LoginInput {
 
 export interface AdminRequest extends Request {
   member: Member;
+  file: Express.Multer.File;
+  files: Express.Multer.File[];
+}
+
+export interface ExtendedRequest extends Request {
+  member?: Member;
+  cookies: { [key: string]: string };
   file: Express.Multer.File;
   files: Express.Multer.File[];
 }

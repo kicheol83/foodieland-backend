@@ -21,9 +21,22 @@ routerAdmin.get("/check-me", shefController.checkMe);
 routerAdmin.get("/logout", shefController.logout);
 
 /* Recipe */
-routerAdmin.get("/product/all", recipeController.getAllProducts);
-routerAdmin.post("/product/create", recipeController.createNewProduct);
-routerAdmin.post("/product/:id", recipeController.updateChosenProduct);
+routerAdmin.get(
+  "/product/all",
+  shefController.verifyAuth,
+  recipeController.getAllProducts
+);
+routerAdmin.post(
+  "/product/create",
+  shefController.verifyAuth,
+  makeUploader("products").array("productImages", 5),
+  recipeController.createNewProduct
+);
+routerAdmin.post(
+  "/product/:id",
+  shefController.verifyAuth,
+  recipeController.updateChosenProduct
+);
 
 /* User */
 export default routerAdmin;

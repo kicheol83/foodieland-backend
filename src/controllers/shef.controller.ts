@@ -1,14 +1,17 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
-import { LoginInput } from "../libs/types/member";
+import {
+  AdminRequest,
+  ExtendedRequest,
+  LoginInput,
+} from "../libs/types/member";
 import { MemberInput } from "../libs/types/member";
 import AuthService from "../models/Auth.service";
 import { MemberType } from "../libs/enums/member.enum";
 import { AUTH_TIMER } from "../libs/config";
 import { HttpCode, Message } from "../libs/Errors";
 import Errors from "../libs/Errors";
-
 
 const memberService = new MemberService();
 const authService = new AuthService();
@@ -50,7 +53,6 @@ shefController.processSignup = async (req: Request, res: Response) => {
 
     const newMember: MemberInput = req.body;
     newMember.memberType = MemberType.SHEF;
-
 
     const result = await memberService.processSignup(newMember);
     const token = await authService.createToken(result);
@@ -116,4 +118,32 @@ shefController.checkMe = async (req: Request, res: Response) => {
     else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
+
+shefController.verifyAuth = async (
+  req: ExtendedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.cookies["accessToken"];
+    if (!token) {
+      throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
+    }
+
+    const member = await authService.checkAuth(token);
+
+    if (member.memberType !== MemberType.SHEF) {
+      throw new Errors(HttpCode.FORBIDDEN, Message.NOT_AUTHORIZED);
+    }
+
+    req.member = member;
+
+    next();
+  } catch (err) {
+    console.log("Error, verifyAuth:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
 export default shefController;
