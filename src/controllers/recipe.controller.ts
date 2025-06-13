@@ -6,32 +6,32 @@ import RecipeService from "../models/Recipe.service";
 const recipeService = new RecipeService();
 
 const recipeController: T = {};
-recipeController.getAllProducts = async (req: Request, res: Response) => {
+recipeController.getAllRecipe = async (req: Request, res: Response) => {
   try {
-    console.log("getAllProduct");
+    console.log("getAllRecipe");
     res.render("products");
   } catch (err) {
-    console.log("Error, getAllProduct:", err);
+    console.log("Error, getAllRecipe:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
 
-recipeController.createNewProduct = async (req: Request, res: Response) => {
+recipeController.createNewRecipe = async (req: Request, res: Response) => {
   try {
-    console.log("createNewProduct");
+    console.log("createNewRecipe");
   } catch (err) {
-    console.log("Error, createNewProduct:", err);
+    console.log("Error, createNewRecipe:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
 
-recipeController.updateChosenProduct = async (req: Request, res: Response) => {
+recipeController.updateChosenRecipe = async (req: Request, res: Response) => {
   try {
-    console.log("updateChosenProduct");
+    console.log("updateChosenRecipe");
   } catch (err) {
-    console.log("Error, updateChosenProduct:", err);
+    console.log("Error, updateChosenRecipe:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }

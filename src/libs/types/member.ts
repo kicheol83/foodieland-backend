@@ -1,6 +1,5 @@
 import { ObjectId } from "mongoose";
 import { MemberStatus, MemberType } from "../enums/member.enum";
-import { Cookie } from "@types/express-session";
 
 export interface Member {
   _id: ObjectId;

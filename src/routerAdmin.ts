@@ -22,20 +22,20 @@ routerAdmin.get("/logout", shefController.logout);
 
 /* Recipe */
 routerAdmin.get(
-  "/product/all",
+  "/recipe/all",
   shefController.verifyAuth,
-  recipeController.getAllProducts
+  recipeController.getAllRecipe
 );
 routerAdmin.post(
-  "/product/create",
+  "/recipe/create",
   shefController.verifyAuth,
   makeUploader("products").array("productImages", 5),
-  recipeController.createNewProduct
+  recipeController.createNewRecipe
 );
 routerAdmin.post(
-  "/product/:id",
+  "/recipe/:id",
   shefController.verifyAuth,
-  recipeController.updateChosenProduct
+  recipeController.updateChosenRecipe
 );
 
 /* User */
