@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Errors from "../libs/Errors";
 import { T } from "../libs/types/common";
-import RecipeService from "../models/Recipe.service";
+import RecipeService from "../schema/Recipe.model";
 
 const recipeService = new RecipeService();
 

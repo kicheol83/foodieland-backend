@@ -49,9 +49,13 @@ shefController.getSignup = (req: Request, res: Response) => {
 shefController.processSignup = async (req: Request, res: Response) => {
   try {
     console.log("processSignup");
-    console.log("body", req.body);
+
+    const file = req.file;
+    if (!file)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
 
     const newMember: MemberInput = req.body;
+    newMember.memberImage = file?.path.replace(/\\/g, "/");
     newMember.memberType = MemberType.SHEF;
 
     const result = await memberService.processSignup(newMember);
@@ -61,7 +65,7 @@ shefController.processSignup = async (req: Request, res: Response) => {
       httpOnly: false,
     });
 
-    res.status(HttpCode.CREATED).json({ member: result, accessToken: token });
+    res.redirect("/admin/recipe/all");
   } catch (err) {
     console.log("Error, signup:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
@@ -82,7 +86,7 @@ shefController.processLogin = async (req: Request, res: Response) => {
       maxAge: AUTH_TIMER * 3600 * 1000,
       httpOnly: false,
     });
-    res.status(HttpCode.OK).json({ member: result, accessToken: token });
+    res.redirect("/admin/recipe/all");
   } catch (err) {
     console.log("Error, login:", err);
     if (err instanceof Errors) res.status(err.code).json(err);

@@ -29,7 +29,7 @@ routerAdmin.get(
 routerAdmin.post(
   "/recipe/create",
   shefController.verifyAuth,
-  makeUploader("products").array("productImages", 5),
+  makeUploader("products").array("recipeImage", 5),
   recipeController.createNewRecipe
 );
 routerAdmin.post(
