@@ -15,20 +15,20 @@ const interviewSchema = new Schema({
 
 const authorSchema = new Schema(
   {
-    memberNick: {
+    authorNick: {
       type: String,
       required: true,
     },
-    memberImage: {
+    authorImage: {
       type: String,
       required: true,
     },
-    memberDesc: {
+    authotDesc: {
       type: String,
       required: true,
     },
 
-    interviews: {
+    authorInterview: {
       type: [interviewSchema],
       required: true,
     },
