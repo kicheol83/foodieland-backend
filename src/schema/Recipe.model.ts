@@ -29,23 +29,27 @@ const recipeSchema = new Schema(
       type: String,
       required: true,
     },
+
     recipePrepTime: {
       type: Number,
       enum: PrepTime,
       default: PrepTime.ONE_FIVE,
       required: true,
     },
+
     recipeCookTime: {
       type: Number,
       enum: CookTime,
       default: CookTime.ONE_FIVE,
       required: true,
     },
+
     recipeType: {
       type: String,
       enum: Categories,
       required: true,
     },
+
     recipeImage: {
       type: String,
     },
@@ -66,8 +70,14 @@ const recipeSchema = new Schema(
         message: "Directions must contain exactly 3 steps.",
       },
     },
+
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "Author",
+      required: true,
+    },
   },
-  { timestamps: true } // adds createdAt & updatedAt
+  { timestamps: true } 
 );
 
 export default mongoose.model("Recipe", recipeSchema);
