@@ -9,7 +9,8 @@ export interface Recipe {
   recipeCookTime: CookTime;
   recipeType: Categories;
   recipeImage: string[];
-  recipeNutrition: nutritionSchema;
+  recipeNutrition: string[];
+  recipeIngredients: string[];
   recipeDirections: string[];
   authorId: ObjectId;
   createdAt: Date;
