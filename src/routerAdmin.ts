@@ -22,6 +22,14 @@ routerAdmin.get("/check-me", shefController.checkMe);
 routerAdmin.get("/logout", shefController.logout);
 
 /** Author **/
+
+routerAdmin.post(
+  "/author/create",
+  shefController.verifyAuth,
+  makeUploader("authors").single("authorImage"),
+  authorController.createAuthor
+);
+
 routerAdmin.get(
   "/author/all",
   shefController.verifyAuth,
@@ -29,22 +37,17 @@ routerAdmin.get(
 );
 
 routerAdmin.get(
-  "/author/:id",
+  "/author/param/:id",
   shefController.verifyAuth,
   authorController.getAuthorById
 );
 
-routerAdmin.post(
-  "/author/create",
-  shefController.verifyAuth,
-  makeUploader("authors").single("memberImage"),
-  authorController.createAuthor
-);
+
 
 routerAdmin.post(
   "/author/update/:id",
   shefController.verifyAuth,
-  makeUploader("authors").single("memberImage"),
+  makeUploader("authors").single("authorImage"),
   authorController.updateAuthor
 );
 
@@ -60,6 +63,13 @@ routerAdmin.get(
   shefController.verifyAuth,
   recipeController.getAllRecipe
 );
+
+routerAdmin.get(
+  "/recipe/by/:id",
+  shefController.verifyAuth,
+  recipeController.getRecipeById
+);
+
 routerAdmin.post(
   "/recipe/create",
   shefController.verifyAuth,

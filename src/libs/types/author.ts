@@ -1,26 +1,27 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 export interface Author {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   authorNick: string;
   authorImage: string;
-  authotDesc: string;
-  authorInterview: [string];
+  authorDesc: string;
+  authorInterview: AuthorInterviewItem[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface AuthotInput {
+export interface AuthorInput {
   authorNick: string;
   authorImage: string;
-  authotDesc: string;
-  authorInterview: [string];
+  authorDesc: string;
+  authorInterview: AuthorInterviewItem[];
 }
 
 export interface AuthorUpdateInput {
+  authorNick?: string;
   authorImage?: string;
-  authotDesc?: string;
-  authorInterview?: [string];
+  authorDesc?: string;
+  authorInterview?: AuthorInterviewItem[];
 }
 
 export interface AuthorInterviewItem {

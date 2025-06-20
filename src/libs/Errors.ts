@@ -24,6 +24,8 @@ export enum Message {
   NOT_AUTHENTICATED = "You are not authenticated, Please login first!",
   TOKEN_CREATION_FAILED = "Token creation error",
   NOT_AUTHORIZED = "Not authorized",
+  IS_NOT_PARAMS_ID = "Is not params ID",
+  USED_ALREADY_AUTHOR_NICK = "Used already author nick"
 }
 
 class Errors extends Error {

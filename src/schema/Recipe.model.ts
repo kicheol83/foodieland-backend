@@ -3,7 +3,7 @@ import { Categories } from "../libs/enums/categories.enum";
 import { CookTime, PrepTime } from "../libs/enums/recipe.enum";
 
 // Nutrition Schema
-const nutritionSchema = new Schema(
+export const nutritionSchema = new Schema(
   {
     calories: { type: String, required: true },
     carbs: { type: String, required: true },
@@ -15,7 +15,7 @@ const nutritionSchema = new Schema(
 );
 
 // Ingredient Schema
-const ingredientSchema = new Schema(
+export const ingredientSchema = new Schema(
   {
     name: { type: String, required: true },
   },
@@ -52,6 +52,7 @@ const recipeSchema = new Schema(
 
     recipeImage: {
       type: String,
+      default: [],
     },
 
     recipeNutrition: nutritionSchema,
@@ -63,6 +64,7 @@ const recipeSchema = new Schema(
 
     recipeDirections: {
       type: [String],
+      default: [],
       validate: {
         validator: function (val: string[]) {
           return val.length === 3;
@@ -71,13 +73,13 @@ const recipeSchema = new Schema(
       },
     },
 
-    author: {
+    authorId: {
       type: Schema.Types.ObjectId,
       ref: "Author",
       required: true,
     },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 export default mongoose.model("Recipe", recipeSchema);

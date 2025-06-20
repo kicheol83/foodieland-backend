@@ -1,0 +1,9 @@
+<%- include('includes/header') %>
+<h1>All Authors</h1>
+<ul>
+  <% authors.forEach(author => { %>
+  <li><%= author.authorNick %></li>
+  <% }) %>
+</ul>
+
+<%- include('includes/footer') %>

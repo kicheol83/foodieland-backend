@@ -6,6 +6,29 @@ import RecipeService from "../schema/Recipe.model";
 const recipeService = new RecipeService();
 
 const recipeController: T = {};
+
+recipeController.createNewRecipe = async (req: Request, res: Response) => {
+  try {
+    console.log("createNewRecipe");
+  } catch (err) {
+    console.log("Error, createNewRecipe:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+recipeController.getRecipeById = async (req: Request, res: Response) => {
+  try {
+    console.log("getAllRecipe");
+    res.render("products");
+  } catch (err) {
+    console.log("Error, getAllRecipe:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+
 recipeController.getAllRecipe = async (req: Request, res: Response) => {
   try {
     console.log("getAllRecipe");
@@ -17,15 +40,6 @@ recipeController.getAllRecipe = async (req: Request, res: Response) => {
   }
 };
 
-recipeController.createNewRecipe = async (req: Request, res: Response) => {
-  try {
-    console.log("createNewRecipe");
-  } catch (err) {
-    console.log("Error, createNewRecipe:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
-  }
-};
 
 recipeController.updateChosenRecipe = async (req: Request, res: Response) => {
   try {

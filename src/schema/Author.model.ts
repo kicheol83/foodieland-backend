@@ -4,7 +4,7 @@ import { AnswerQuetions } from "../libs/enums/answer.quetions";
 const interviewSchema = new Schema({
   question: {
     type: String,
-    enum: Object.values(AnswerQuetions),
+    enum: AnswerQuetions,
     required: true,
   },
   answer: {
@@ -18,12 +18,13 @@ const authorSchema = new Schema(
     authorNick: {
       type: String,
       required: true,
+      index: { unique: true, sparse: true },
     },
     authorImage: {
       type: String,
       required: true,
     },
-    authotDesc: {
+    authorDesc: {
       type: String,
       required: true,
     },
