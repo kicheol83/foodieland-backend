@@ -65,21 +65,27 @@ routerAdmin.post(
 );
 
 routerAdmin.get(
-  "/recipe/all",
-  shefController.verifyAuth,
-  recipeController.getAllRecipe
-);
-
-routerAdmin.get(
   "/recipe/by/:id",
   shefController.verifyAuth,
   recipeController.getRecipeById
+);
+
+routerAdmin.get(
+  "/recipe/all",
+  shefController.verifyAuth,
+  recipeController.getAllRecipe
 );
 
 routerAdmin.post(
   "/recipe/:id",
   shefController.verifyAuth,
   recipeController.updateChosenRecipe
+);
+
+routerAdmin.post(
+  "/recipe/delete/:id",
+  shefController.verifyAuth,
+  recipeController.deleteRecipe
 );
 
 /* User */

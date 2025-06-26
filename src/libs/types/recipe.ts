@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import { Categories } from "../enums/categories.enum";
 import { CookTime, PrepTime } from "../enums/recipe.enum";
 
@@ -16,7 +16,7 @@ export interface Ingredient {
 }
 
 export interface Recipe {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   recipeName: string;
   recipePrepTime: PrepTime;
   recipeCookTime: CookTime;
@@ -28,7 +28,7 @@ export interface Recipe {
   recipeView?: number;
   recipeLike?: number;
   recipeVideo?: string;
-  authorId: ObjectId;
+  authorId: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -54,5 +54,26 @@ export interface RecipeInput {
   recipeDirections: string[];
   recipeView?: number;
   recipeLike?: number;
+  recipeVideo?: string;
+}
+
+export interface RecipeUpdate {
+  recipeName?: string;
+  recipePrepTime?: PrepTime;
+  recipeCookTime?: CookTime;
+  recipeType?: Categories;
+  recipeImage?: string[]; // Fayl yuklansa: req.files orqali
+  recipeNutrition?: {
+    calories?: string;
+    carbs?: string;
+    protein?: string;
+    fat?: string;
+    sugar?: string;
+  };
+  recipeIngredients?: {
+    title?: string;
+    items?: string[];
+  }[];
+  recipeDirections?: string[];
   recipeVideo?: string;
 }

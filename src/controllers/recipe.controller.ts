@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import RecipeServices from "../models/Recipe.service";
-import { RecipeInput } from "../libs/types/recipe";
+import { RecipeInput, RecipeUpdate } from "../libs/types/recipe";
 
 const recipeService = new RecipeServices();
 
@@ -38,6 +38,63 @@ recipeController.createNewRecipe = async (req: Request, res: Response) => {
   }
 };
 
+recipeController.getRecipeById = async (req: Request, res: Response) => {
+  try {
+    const authorId = req.params.id;
+    if (!authorId)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.IS_NOT_PARAMS_ID);
 
+    console.log("getAuthorById for id:", authorId);
+
+    const result = await recipeService.getRecipeById(authorId);
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, getAuthorById:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+recipeController.getAllRecipe = async (req: Request, res: Response) => {
+  try {
+    console.log("getAllRecipe");
+    const recipe = await recipeService.getAllRecipe();
+    res.json({ recipe });
+  } catch (err) {
+    console.log("Error, getAllRecipe:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+recipeController.updateChosenRecipe = async (req: Request, res: Response) => {
+  try {
+    console.log("updateChosenRecipe");
+    console.log("req.body =>", req.body);
+    const recipeId = req.params.id;
+    const input: RecipeUpdate = req.body;
+    if (req.file) input.recipeImage = [req.file.path.replace(/\\/, "/")];
+    const result = await recipeService.updateChosenRecipe(recipeId, input);
+
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, updateChosenRecipe:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+recipeController.deleteRecipe = async (req: Request, res: Response) => {
+  try {
+    console.log("deleteRecipe");
+    const recipeId = req.params.id;
+    await recipeService.deleteRecipe(recipeId);
+    res.send("succesfull deleted");
+  } catch (err) {
+    console.log("Error, deleteRecipe:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
 
 export default recipeController;
