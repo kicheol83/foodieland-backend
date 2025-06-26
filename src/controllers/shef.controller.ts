@@ -13,10 +13,10 @@ const memberService = new MemberService();
 const authService = new AuthService();
 
 const shefController: T = {};
-shefController.goHome = (req: Request, res: Response) => {
+shefController.goHome = (req: ExtendedRequest, res: Response) => {
   try {
     console.log("goHome");
-    res.render("home");
+    res.render("home", { member: req.member });
   } catch (err) {
     console.log("Error. home:", err);
   }
@@ -61,18 +61,20 @@ shefController.processSignup = async (req: Request, res: Response) => {
       httpOnly: false,
     });
 
-    res.redirect("/admin/recipe/all");
+    res.redirect("/admin/author/all");
   } catch (err) {
-    console.log("Error, signup:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
+    console.log("Error. processSignup:", err);
+    const message =
+      err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    res.send(
+      `<script> alert ("${message}"); window.location.replace('/admin/signup') </script>`
+    );
   }
 };
 
 shefController.processLogin = async (req: Request, res: Response) => {
   try {
     console.log("processLogin");
-    console.log("body:", req.body);
     const input: LoginInput = req.body;
 
     const result = await memberService.processLogin(input),
@@ -82,11 +84,14 @@ shefController.processLogin = async (req: Request, res: Response) => {
       maxAge: AUTH_TIMER * 3600 * 1000,
       httpOnly: false,
     });
-    res.redirect("/admin/recipe/all");
+    res.redirect("/admin/author/all");
   } catch (err) {
-    console.log("Error, login:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
+    console.log("Error. processLogin:", err);
+    const message =
+      err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    res.send(
+      `<script> alert ("${message}"); window.location.replace('/admin/login') </script>`
+    );
   }
 };
 
@@ -94,10 +99,10 @@ shefController.logout = async (req: Request, res: Response) => {
   try {
     console.log("logout");
     res.clearCookie("accessToken");
-    res.redirect("home");
+    res.redirect("/admin");
   } catch (err) {
     console.log("Error. logout:", err);
-    res.redirect("/");
+    res.redirect("/admin");
   }
 };
 
@@ -152,7 +157,7 @@ shefController.getUsers = async (req: Request, res: Response) => {
     console.log("getUsers");
     const result = await memberService.getUsers();
 
-    res.json({users: result });
+    res.json({ users: result });
   } catch (err) {
     console.log("Error. getUsers:", err);
     res.redirect("/admin/login");

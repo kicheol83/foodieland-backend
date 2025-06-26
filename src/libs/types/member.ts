@@ -54,7 +54,7 @@ export interface AdminRequest extends Request {
 }
 
 export interface ExtendedRequest extends Request {
-  member?: Member;
+  member: Member;
   author: Author;
   cookies: { [key: string]: string };
   file: Express.Multer.File;
