@@ -28,6 +28,12 @@
   padding: 25px;
 }
 
+.signup-container .signup-frame .signup-btn {
+  height: 60px;
+  background: #23a6d5;
+  border: none;
+}
+
 .signup-container .signup-frame .sign-input-frame {
   position: relative;
   width: 100%;
@@ -58,7 +64,7 @@
   position: relative;
   margin-top: 10px;
   padding-left: 20px;
-  width: 100%;
+  width: auto;
   height: 55px;
   background: #f6f5f5;
   border: 1px solid #dddddd;
@@ -148,7 +154,7 @@
   position: relative;
   padding: 20px;
   width: 85%;
-  height: 55px;
+  height: auto;
   display: flex;
   background: #ffffff;
   border: 1px solid #dddddd;
