@@ -2,8 +2,8 @@ import express from "express";
 const routerAdmin = express.Router();
 import shefController from "./controllers/shef.controller";
 import makeUploader from "./libs/utils/uploader";
-import recipeController from "./controllers/recipe.controller";
 import authorController from "./controllers/author.controller";
+import recipeController from "./controllers/recipe.controller";
 
 /* Shef */
 routerAdmin.get("/", shefController.goHome);
@@ -42,8 +42,6 @@ routerAdmin.get(
   authorController.getAuthorById
 );
 
-
-
 routerAdmin.post(
   "/author/update/:id",
   shefController.verifyAuth,
@@ -58,6 +56,14 @@ routerAdmin.post(
 );
 
 /* Recipe */
+
+routerAdmin.post(
+  "/recipe/create",
+  shefController.verifyAuth,
+  makeUploader("recipe").single("recipeImage"),
+  recipeController.createNewRecipe
+);
+
 routerAdmin.get(
   "/recipe/all",
   shefController.verifyAuth,
@@ -70,12 +76,6 @@ routerAdmin.get(
   recipeController.getRecipeById
 );
 
-routerAdmin.post(
-  "/recipe/create",
-  shefController.verifyAuth,
-  makeUploader("products").array("recipeImage", 5),
-  recipeController.createNewRecipe
-);
 routerAdmin.post(
   "/recipe/:id",
   shefController.verifyAuth,

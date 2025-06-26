@@ -80,6 +80,7 @@ authorController.updateAuthor = async (req: Request, res: Response) => {
     const input: AuthorUpdateInput = req.body;
     if (req.file) input.authorImage = req.file.path.replace(/\\/, "/");
     const result = await authorService.updateAuthor(authorId, input);
+    
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {

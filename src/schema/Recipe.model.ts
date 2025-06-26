@@ -2,27 +2,19 @@ import mongoose, { Schema } from "mongoose";
 import { Categories } from "../libs/enums/categories.enum";
 import { CookTime, PrepTime } from "../libs/enums/recipe.enum";
 
-// Nutrition Schema
-export const nutritionSchema = new Schema(
-  {
-    calories: { type: String, required: true },
-    carbs: { type: String, required: true },
-    protein: { type: String, required: true },
-    fat: { type: String, required: true },
-    sugar: { type: String, required: true },
-  },
-  { _id: false }
-);
+const nutritionSchema = new Schema({
+  calories: { type: String, required: true },
+  carbs: { type: String, required: true },
+  protein: { type: String, required: true },
+  fat: { type: String, required: true },
+  sugar: { type: String, required: false },
+});
 
-// Ingredient Schema
-export const ingredientSchema = new Schema(
-  {
-    name: { type: String, required: true },
-  },
-  { _id: false }
-);
+const ingredientSchema = new Schema({
+  title: { type: String, required: true },
+  items: [{ type: String, required: true }],
+});
 
-// Main Recipe Schema
 const recipeSchema = new Schema(
   {
     recipeName: {
@@ -33,14 +25,12 @@ const recipeSchema = new Schema(
     recipePrepTime: {
       type: Number,
       enum: PrepTime,
-      default: PrepTime.ONE_FIVE,
       required: true,
     },
 
     recipeCookTime: {
       type: Number,
       enum: CookTime,
-      default: CookTime.ONE_FIVE,
       required: true,
     },
 
@@ -51,30 +41,39 @@ const recipeSchema = new Schema(
     },
 
     recipeImage: {
-      type: String,
-      default: [],
-    },
-
-    recipeNutrition: nutritionSchema,
-
-    recipeIngredients: {
-      mainDish: [ingredientSchema],
-      sauce: [ingredientSchema],
-    },
-
-    recipeDirections: {
       type: [String],
       default: [],
-      validate: {
-        validator: function (val: string[]) {
-          return val.length === 3;
-        },
-        message: "Directions must contain exactly 3 steps.",
-      },
+    },
+
+    recipeNutrition: {
+      type: [nutritionSchema],
+      required: true,
+    },
+
+    recipeIngredients: {
+      type: [ingredientSchema],
+      required: true,
+    },
+
+    recipeDirections: [{ type: String, required: true }],
+
+    recipeView: {
+      type: Number,
+      default: 0,
+    },
+
+    recipeLike: {
+      type: Number,
+      default: 0,
+    },
+
+    recipeVideo: {
+      type: String,
+      required: false,
     },
 
     authorId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Author",
       required: true,
     },
@@ -82,4 +81,4 @@ const recipeSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Recipe", recipeSchema);
+export const RecipeModel = mongoose.model("Recipe", recipeSchema);

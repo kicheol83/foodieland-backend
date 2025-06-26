@@ -1,54 +1,43 @@
 import { Request, Response } from "express";
-import Errors from "../libs/Errors";
+import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
-import RecipeService from "../schema/Recipe.model";
+import RecipeServices from "../models/Recipe.service";
+import { RecipeInput } from "../libs/types/recipe";
 
-const recipeService = new RecipeService();
+const recipeService = new RecipeServices();
 
 const recipeController: T = {};
 
 recipeController.createNewRecipe = async (req: Request, res: Response) => {
   try {
-    console.log("createNewRecipe");
+    console.log("createNewProduct");
+    console.log("reqbody =>", req.body);
+    const file = req.file;
+    if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
+
+    const data: RecipeInput = req.body;
+    data.recipeImage = [file.path.replace(/\\/g, "/")];
+    if (typeof data.recipeIngredients === "string") {
+      data.recipeIngredients = JSON.parse(data.recipeIngredients);
+    }
+    if (typeof data.recipeDirections === "string") {
+      data.recipeDirections = JSON.parse(data.recipeDirections);
+    }
+    if (typeof data.recipeNutrition === "string") {
+      data.recipeNutrition = JSON.parse(data.recipeNutrition);
+    }
+
+    await recipeService.createNewRecipe(data.authorId, data);
+
+    res.send(`<script> alert ("Sucessful creation")</script>`);
   } catch (err) {
-    console.log("Error, createNewRecipe:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
+    console.log("Error, createNewProduct:", err);
+    const message =
+      err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    res.send(`<script> alert ("${message}")</script>`);
   }
 };
 
-recipeController.getRecipeById = async (req: Request, res: Response) => {
-  try {
-    console.log("getAllRecipe");
-    res.render("products");
-  } catch (err) {
-    console.log("Error, getAllRecipe:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
-  }
-};
 
-
-recipeController.getAllRecipe = async (req: Request, res: Response) => {
-  try {
-    console.log("getAllRecipe");
-    res.render("products");
-  } catch (err) {
-    console.log("Error, getAllRecipe:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
-  }
-};
-
-
-recipeController.updateChosenRecipe = async (req: Request, res: Response) => {
-  try {
-    console.log("updateChosenRecipe");
-  } catch (err) {
-    console.log("Error, updateChosenRecipe:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
-  }
-};
 
 export default recipeController;

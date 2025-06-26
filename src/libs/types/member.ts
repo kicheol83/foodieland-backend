@@ -48,4 +48,5 @@ export interface ExtendedRequest extends Request {
   cookies: { [key: string]: string };
   file: Express.Multer.File;
   files: Express.Multer.File[];
+  
 }
