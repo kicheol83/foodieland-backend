@@ -1,4 +1,4 @@
-<%- include('includes/header') %> 
+<%- include('includes/header') %>
 
 <link rel="stylesheet" type="text/css" href="/css/author.css" />
 
@@ -25,11 +25,147 @@
       </ul>
     </div>
 
-   
+    <div class="restaurant-menu-frame">
+      <div class="board">
+        <div class="dishes-table">
+          <span class="new-dish-txt" style="margin-bottom: 30px">
+            RESTAURANT MENU
+          </span>
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <tr class="thead-light">
+                <th scope="col">T/r</th>
+                <th scope="col">Author Name</th>
+                <th scope="col">Author Image</th>
+                <th scope="col">Author Desc</th>
+                <th scope="col">Author Interview</th>
+              </tr>
+            </thead>
+            <!--  LOOP PRODUCTS: START  -->
+            <% authors.map(function(value, key) { %>
+            <tbody style="background: white">
+              <td><%= key + 1 %></td>
+              <td><%= value.authorNick %></td>
+              <td>
+                <img
+                  src="/<%= value.authorImage %>"
+                  alt="Author image"
+                  style="width: 80px; height: 80px; object-fit: cover"
+                />
+              </td>
+              <td><%= value.authorDesc %></td>
+
+              <td>
+                <% value.authorInterview.forEach(function(interview) { %>
+
+                <p>
+                  <strong>Question:&nbsp;&nbsp;</strong><%= interview.question
+                  %>:
+                </p>
+                <strong>Answer:&nbsp;&nbsp;</strong> <%= interview.answer %> <%
+                }) %>
+              </td>
+            </tbody>
+            <% }) %>
+
+            <!--  LOOP PRODUCTS: END  -->
+          </table>
+          <div
+            class="long-input"
+            style="align-items: flex-end; margin-bottom: 25px"
+          >
+            <button class="btn btn-primary" id="process-btn">
+              New Product
+            </button>
+          </div>
+        </div>
+        <form
+          onsubmit="return validateForm()"
+          action="/admin/author/create"
+          method="POST"
+          class="dish-container"
+          enctype="multipart/form-data"
+        >
+          <div class="long-input" style="display: flex; align-items: center">
+            <span class="new-dish-txt">NEW AUTHOR DETAIL</span>
+          </div>
+          <div class="login-input-frame">
+            <div class="long-input">
+              <label>Author Name</label>
+              <input
+                type="text"
+                placeholder="Name"
+                name="authorNick"
+                class="product-name"
+              />
+            </div>
+          </div>
+
+          <div class="interview-container">
+  <label class="section-title">Author Interview</label>
+
+  <% const questions = [
+    "How did you start out in the food industry?",
+    "What do you like most about your job?",
+    "Do you cook at home on your days off?",
+    "Advice to young people?",
+    "Biggest misconception?"
+  ]; %>
+
+  <% questions.forEach(function(question, index) { %>
+    <div class="interview-block">
+      <label class="interview-label"><%= question %></label>
+      <input
+        type="hidden"
+        name="authorInterview[<%= index %>][question]"
+        value="<%= question %>"
+      />
+      <input
+        type="text"
+        name="authorInterview[<%= index %>][answer]"
+        placeholder="Write your answer here"
+        class="interview-input"
+        required
+      />
+    </div>
+  <% }) %>
+</div>
+
+
+          <div class="long-input">
+            <label>Author Description</label>
+            <textarea name="authorDesc" class="product-desc"></textarea>
+          </div>
+
+          <div class="img-frame">
+            <label>Author Images</label>
+            <div class="media-frame">
+              <div class="upload-img-box">
+                <img src="/img/upload.svg" class="1" id="image-section-1" />
+                <input
+                  type="file"
+                  id="file"
+                  name="authorImage"
+                  class="image-one"
+                  required
+                  onchange="previewFileHandler(this, 1)"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="operation-buttons">
+            <button class="btn1 btn-danger" id="cancel-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="create-btn">
+              Create
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <script type="text/javascript" src="/js/products.js"></script>
+  <script type="text/javascript" src="/js/author.js"></script>
 </body>
-
 
 <%- include('includes/footer') %>

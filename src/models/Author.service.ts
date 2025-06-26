@@ -28,7 +28,8 @@ class AuthorService {
 
   public async createAuthor(input: AuthorInput) {
     try {
-      return await this.authorModel.create(input);
+      const result = await this.authorModel.create(input);
+      return result;
     } catch (err) {
       console.error("Erorr. model:createAuthor", err);
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
@@ -63,6 +64,8 @@ class AuthorService {
   public async findByNick(nick: string) {
     return await this.authorModel.findOne({ authorNick: nick });
   }
+
+  
 }
 
 export default AuthorService;

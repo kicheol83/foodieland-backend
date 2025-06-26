@@ -28,7 +28,7 @@ $(function () {
     const productStatus = $(`#${id}.new-product-status`).val();
 
     try {
-      const response = await axios.post(`/admin/product/${id}`, {
+      const response = await axios.post(`/admin/author/${id}`, {
         productStatus: productStatus,
       });
       console.log("response:", response);
@@ -44,20 +44,16 @@ $(function () {
 });
 
 function validateForm() {
-  const productName = $(".product-name").val();
-  const productPrice = $(".product-price").val();
-  const productLeftCount = $(".product-left-count").val();
-  const productCollection = $(".product-collection").val();
-  const productDesc = $(".product-desc").val();
-  const productStatus = $(".product-status").val();
+  const authorNick = $(".product-name").val();
+  const authorImage = $(".image-one").val();
+  const authorDesc = $(".product-desc").val();
+  const authorInterview = $(".interview-input").val();
 
   if (
-    productName === "" ||
-    productPrice === "" ||
-    productLeftCount === "" ||
-    productCollection === "" ||
-    productDesc === "" ||
-    productStatus === ""
+    authorNick === "" ||
+    authorImage === "" ||
+    authorDesc === "" ||
+    authorInterview === ""
   ) {
     alert("Please insert all details");
     return false;

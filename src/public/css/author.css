@@ -40,6 +40,36 @@
   font-family: monospace;
 }
 
+.products-container .tbody {
+  height: 40px;
+}
+
+.products-container .thead-light {
+  background: #495057;
+  color: white;
+  height: 50px;
+}
+
+.products-container .btn {
+  margin-top: 40px;
+  background: #4eacf9;
+  width: 139px;
+  height: 45px;
+  border: none;
+}
+
+.products-container .btn1 {
+  margin-top: 40px;
+  background: red;
+  width: 139px;
+  height: 45px;
+  border: none;
+}
+
+.products-container .table {
+  width: 100%;
+}
+
 .products-container .restaurant-menu-frame {
   position: relative;
   padding-bottom: 80px;
@@ -113,7 +143,7 @@
   position: relative;
   margin-top: 10px;
   padding-left: 20px;
-  width: 100%;
+  width: 300px;
   height: 54px;
   border: none;
   background: #f7f7f7;
@@ -372,4 +402,44 @@ table th {
 
 .products-container .slider.round:before {
   border-radius: 50%;
+}
+
+.products-container .interview-container {
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.products-container .section-title {
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.products-container .interview-block {
+  margin-bottom: 20px;
+}
+
+.products-container .interview-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.products-container .interview-input {
+  width: 98%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.products-container .interview-input:focus {
+  border-color: #7abaff;
+  outline: none;
+  box-shadow: 0 0 3px rgba(122, 186, 255, 0.5);
 }

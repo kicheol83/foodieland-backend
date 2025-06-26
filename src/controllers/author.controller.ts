@@ -42,7 +42,6 @@ authorController.getAuthorById = async (req: Request, res: Response) => {
 
 authorController.createAuthor = async (req: Request, res: Response) => {
   try {
-    console.log("req.body =>", req.body);
     console.log("createAuthor");
     const file = req.file;
     if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
@@ -64,7 +63,7 @@ authorController.createAuthor = async (req: Request, res: Response) => {
     }
 
     const result = await authorService.createAuthor(newAuthor);
-    res.status(HttpCode.OK).json(result);
+    res.redirect("/admin/recipe/all");
   } catch (err) {
     console.log("Error, createAuthor:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
@@ -80,7 +79,6 @@ authorController.updateAuthor = async (req: Request, res: Response) => {
     const input: AuthorUpdateInput = req.body;
     if (req.file) input.authorImage = req.file.path.replace(/\\/, "/");
     const result = await authorService.updateAuthor(authorId, input);
-    
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {

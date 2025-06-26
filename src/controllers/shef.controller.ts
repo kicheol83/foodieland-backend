@@ -16,7 +16,7 @@ const shefController: T = {};
 shefController.goHome = (req: ExtendedRequest, res: Response) => {
   try {
     console.log("goHome");
-    res.render("home", { member: req.member });
+    res.render("home", { member: req.member ?? null });
   } catch (err) {
     console.log("Error. home:", err);
   }
@@ -142,7 +142,6 @@ shefController.verifyAuth = async (
     }
 
     req.member = member;
-
     next();
   } catch (err) {
     console.log("Error, verifyAuth:", err);
