@@ -43,6 +43,7 @@ class AuthorService {
 
     const result = await AuthorModel.findOneAndUpdate({ _id }, input, {
       new: true,
+      runValidators: true,
     }).exec();
 
     if (!result) {
@@ -51,6 +52,7 @@ class AuthorService {
 
     return result;
   };
+
   public async deleteAuthor(id: string) {
     const result = await this.authorModel.findByIdAndDelete(id);
     if (!result)

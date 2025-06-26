@@ -1,9 +1,9 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import { MemberStatus, MemberType } from "../enums/member.enum";
 import { Author } from "./author";
 
 export interface Member {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   memberType: MemberType;
   memberStatus: MemberStatus;
   memberNick: string;
@@ -29,6 +29,17 @@ export interface MemberInput {
   memberImage?: string;
 }
 
+export interface MemberUpdate {
+  _id: ObjectId;
+  memberNick?: string;
+  memberPhone?: string;
+  memberEmail?: string;
+  memberPassword?: string;
+  memberAddress?: string;
+  memberDesc?: string;
+  memberImage?: string;
+}
+
 export interface LoginInput {
   memberNick: string;
   memberPassword: string;
@@ -48,5 +59,4 @@ export interface ExtendedRequest extends Request {
   cookies: { [key: string]: string };
   file: Express.Multer.File;
   files: Express.Multer.File[];
-  
 }

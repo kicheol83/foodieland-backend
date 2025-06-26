@@ -89,4 +89,16 @@ routerAdmin.post(
 );
 
 /* User */
+
+routerAdmin.get(
+  "/user/all",
+  shefController.verifyAuth,
+  shefController.getUsers
+);
+
+routerAdmin.post(
+  "/user/edit",
+  shefController.verifyAuth,
+  shefController.updateChosenUser
+);
 export default routerAdmin;

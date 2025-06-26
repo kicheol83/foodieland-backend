@@ -1,6 +1,12 @@
+import { shapeIntoMogooseObjectId } from "../libs/config";
 import { MemberType } from "../libs/enums/member.enum";
 import Errors, { Message, HttpCode } from "../libs/Errors";
-import { Member, MemberInput, LoginInput } from "../libs/types/member";
+import {
+  Member,
+  MemberInput,
+  LoginInput,
+  MemberUpdate,
+} from "../libs/types/member";
 import MemberModel from "../schema/Member.model";
 import * as bcrypt from "bcryptjs";
 
@@ -107,6 +113,32 @@ class MemberService {
       throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 
     return fullMember.toObject();
+  }
+
+  public async getUsers(): Promise<Member[]> {
+    const result = await this.memberModel
+      .find({ memberType: MemberType.USER })
+      .exec();
+
+    if (!result || result.length === 0) {
+      throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    }
+
+    const users: Member[] = result.map((doc: any) => doc.toObject());
+    return users;
+  }
+
+  public async updateChosenUser(input: MemberUpdate): Promise<Member> {
+    input._id = shapeIntoMogooseObjectId(input._id);
+    const result = await this.memberModel
+      .findByIdAndUpdate({ _id: input._id }, input, {
+        new: true,
+        runValidators: true,
+      })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    return result.toObject();
   }
 }
 
