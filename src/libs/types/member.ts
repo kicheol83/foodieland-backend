@@ -3,7 +3,7 @@ import { MemberStatus, MemberType } from "../enums/member.enum";
 import { Author } from "./author";
 
 export interface Member {
-  _id: Types.ObjectId;
+  _id: ObjectId;
   memberType: MemberType;
   memberStatus: MemberStatus;
   memberNick: string;
@@ -56,6 +56,7 @@ export interface AdminRequest extends Request {
 export interface ExtendedRequest extends Request {
   member: Member;
   author: Author;
+  params: { id: string };
   cookies: { [key: string]: string };
   file: Express.Multer.File;
   files: Express.Multer.File[];

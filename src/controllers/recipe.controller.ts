@@ -5,6 +5,7 @@ import RecipeServices from "../models/Recipe.service";
 import { RecipeInput, RecipeUpdate } from "../libs/types/recipe";
 import { Categories } from "../libs/enums/categories.enum";
 import { shapeIntoMogooseObjectId } from "../libs/config";
+import { ExtendedRequest } from "../libs/types/member";
 
 const recipeService = new RecipeServices();
 
@@ -45,18 +46,34 @@ recipeController.createNewRecipe = async (req: Request, res: Response) => {
   }
 };
 
-recipeController.getRecipeById = async (req: Request, res: Response) => {
+// recipeController.getRecipeById = async (req: Request, res: Response) => {
+//   try {
+//     const authorId = req.params.id;
+//     if (!authorId)
+//       throw new Errors(HttpCode.BAD_REQUEST, Message.IS_NOT_PARAMS_ID);
+
+//     console.log("getAuthorById for id:", authorId);
+
+//     const result = await recipeService.getRecipeById(authorId);
+//     res.status(HttpCode.OK).json(result);
+//   } catch (err) {
+//     console.log("Error, getAuthorById:", err);
+//     if (err instanceof Errors) res.status(err.code).json(err);
+//     else res.status(Errors.standard.code).json(Errors.standard);
+//   }
+// };
+
+recipeController.getRecipeById = async (req: ExtendedRequest, res: Response) => {
   try {
-    const authorId = req.params.id;
-    if (!authorId)
-      throw new Errors(HttpCode.BAD_REQUEST, Message.IS_NOT_PARAMS_ID);
+    console.log("getProduct");
+    const { id } = req.params;
 
-    console.log("getAuthorById for id:", authorId);
+    const memberId = req.member?._id ?? null,
+      result = await recipeService.getRecipeById(memberId, id);
 
-    const result = await recipeService.getRecipeById(authorId);
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error, getAuthorById:", err);
+    console.log("Error, getProduct:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
@@ -105,5 +122,7 @@ recipeController.deleteRecipe = async (req: Request, res: Response) => {
     else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
+
+
 
 export default recipeController;

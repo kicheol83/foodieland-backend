@@ -5,12 +5,17 @@ import { RecipeModel } from "../schema/Recipe.model";
 import { Recipe } from "../libs/types/recipe";
 import { ObjectId } from "mongoose";
 import { shapeIntoMogooseObjectId } from "../libs/config";
+import { ViewInput } from "../libs/types/view";
+import { ViewGroup } from "../libs/enums/view.enum";
+import ViewService from "./Views.service";
 
 class RecipeServices {
   private readonly recipeModel;
+  public viewService;
 
   constructor() {
     this.recipeModel = RecipeModel;
+    this.viewService = new ViewService();
   }
 
   public async createNewRecipe(
@@ -27,13 +32,13 @@ class RecipeServices {
     }
   }
 
-  public async getRecipeById(recipeId: string): Promise<Recipe> {
-    const recipe = shapeIntoMogooseObjectId(recipeId);
-    const result = await this.recipeModel.findById(recipe).exec();
-    if (!result)
-      throw new Errors(HttpCode.NOT_FOUND, Message.SOMETHING_WENT_WRONG);
-    return result.toObject();
-  }
+  // public async getRecipeById(recipeId: string): Promise<Recipe> {
+  //   const recipe = shapeIntoMogooseObjectId(recipeId);
+  //   const result = await this.recipeModel.findById(recipe).exec();
+  //   if (!result)
+  //     throw new Errors(HttpCode.NOT_FOUND, Message.SOMETHING_WENT_WRONG);
+  //   return result.toObject();
+  // }
 
   public async getAllRecipe(): Promise<Recipe[]> {
     const result = await this.recipeModel.find().exec();
@@ -44,6 +49,46 @@ class RecipeServices {
     const recipe: Recipe[] = result.map((doc: any) => doc.toObject());
 
     return recipe;
+  }
+
+  public async getRecipeById(
+    memberId: ObjectId | null,
+    id: string
+  ): Promise<Recipe> {
+    const recipeId = shapeIntoMogooseObjectId(id);
+
+    let result = await this.recipeModel
+      .findOne({
+        _id: recipeId,
+      })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    if (memberId) {
+      // Check Existence
+      const input: ViewInput = {
+        memberId: memberId,
+        viewRefId: recipeId,
+        viewGroup: ViewGroup.RECIPE,
+      };
+      const existView = await this.viewService.checkViewExistence(input);
+
+      console.log("existView:", !!existView);
+      if (!existView) {
+        // Insert View
+        await this.viewService.insertMemberView(input);
+
+        // Incrase View
+        result = await this.recipeModel
+          .findByIdAndUpdate(
+            recipeId,
+            { $inc: { recipeView: 1 } },
+            { new: true }
+          )
+          .exec();
+      }
+    }
+    return result?.toObject() as Recipe;
   }
 
   public async updateChosenRecipe(

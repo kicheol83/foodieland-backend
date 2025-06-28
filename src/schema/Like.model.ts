@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { LikeGroup } from "../libs/enums/Like.enum";
+import { LikeGroup } from "../libs/enums/like.enum";
 
 const likeSchema = new Schema(
   {

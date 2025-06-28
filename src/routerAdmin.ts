@@ -4,6 +4,7 @@ import shefController from "./controllers/shef.controller";
 import makeUploader from "./libs/utils/uploader";
 import authorController from "./controllers/author.controller";
 import recipeController from "./controllers/recipe.controller";
+import likeController from "./controllers/like.controller";
 
 /* Shef */
 routerAdmin.get("/", shefController.goHome);
@@ -86,6 +87,13 @@ routerAdmin.post(
   "/recipe/delete/:id",
   shefController.verifyAuth,
   recipeController.deleteRecipe
+);
+
+/** LIKE **/
+routerAdmin.post(
+  "/recipe/like/:id",
+  shefController.verifyAuth,
+  likeController.toggleRecipeLike
 );
 
 /* User */
