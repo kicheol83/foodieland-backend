@@ -3,6 +3,8 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import RecipeServices from "../models/Recipe.service";
 import { RecipeInput, RecipeUpdate } from "../libs/types/recipe";
+import { Categories } from "../libs/enums/categories.enum";
+import { shapeIntoMogooseObjectId } from "../libs/config";
 
 const recipeService = new RecipeServices();
 
@@ -11,7 +13,7 @@ const recipeController: T = {};
 recipeController.createNewRecipe = async (req: Request, res: Response) => {
   try {
     console.log("createNewProduct");
-    console.log("reqbody =>", req.body);
+
     const file = req.file;
     if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
 
@@ -26,10 +28,15 @@ recipeController.createNewRecipe = async (req: Request, res: Response) => {
     if (typeof data.recipeNutrition === "string") {
       data.recipeNutrition = JSON.parse(data.recipeNutrition);
     }
+    const authorId = shapeIntoMogooseObjectId(req.cookies.authorId);
 
-    await recipeService.createNewRecipe(data.authorId, data);
+    if (!authorId) throw new Errors(HttpCode.BAD_REQUEST, Message.NO_AUTHOR_ID);
 
-    res.send(`<script> alert ("Sucessful creation")</script>`);
+    await recipeService.createNewRecipe(authorId, data);
+
+   
+
+    res.render("users", { authorId, Categories });
   } catch (err) {
     console.log("Error, createNewProduct:", err);
     const message =
@@ -58,8 +65,10 @@ recipeController.getRecipeById = async (req: Request, res: Response) => {
 recipeController.getAllRecipe = async (req: Request, res: Response) => {
   try {
     console.log("getAllRecipe");
+    const authorId = req.body.authorId;
     const recipe = await recipeService.getAllRecipe();
-    res.json({ recipe });
+
+    res.render("recipe", { recipe, Categories, authorId });
   } catch (err) {
     console.log("Error, getAllRecipe:", err);
     if (err instanceof Errors) res.status(err.code).json(err);

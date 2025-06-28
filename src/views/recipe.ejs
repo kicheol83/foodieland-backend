@@ -1,0 +1,282 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/recipe.css" />
+
+<body>
+  <div class="products-container">
+    <div class="navigation-menu">
+      <ul class="nav justify-content-center">
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link active" href="/admin/">Home</a>
+        </li>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link" href="/admin/author/all">Menu</a>
+        </li>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link" href="/admin/user/all">Users</a>
+        </li>
+        <li
+          class="nav-item"
+          style="cursor: pointer"
+          onclick="return confirm('Do you want to logout?')"
+        >
+          <a class="nav-link" href="/admin/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="restaurant-menu-frame">
+      <div class="board">
+        <div class="dishes-table">
+          <span class="new-dish-txt" style="margin-bottom: 30px">
+            RECIPE MENU
+          </span>
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <tr class="thead-light">
+                <th scope="col">T/r</th>
+                <th scope="col">Recipe Name</th>
+                <th scope="col">Recipe PrepTime</th>
+                <th scope="col">Recipe CookTime</th>
+                <th scope="col">Recipe Type</th>
+                <th scope="col">Recipe Nutrition</th>
+                <th scope="col">Recipe Ingredients</th>
+                <th scope="col">Recipe Directions</th>
+              </tr>
+            </thead>
+            <!--  LOOP PRODUCTS: START  -->
+            <% recipe.map(function(value, key) { %>
+            <tbody style="background: white">
+              <td><%= key + 1 %></td>
+              <td><%= value.recipeName %></td>
+              <td><%= value.recipePrepTime %></td>
+              <td><%= value.recipeCookTime %></td>
+              <td><%= value.recipeType %></td>
+              <td>
+                <% value.recipeNutrition.forEach(nut => { %>
+                <div><strong>Calories:</strong> <%= nut.calories %></div>
+                <div><strong>Carbs:</strong> <%= nut.carbs %></div>
+                <div><strong>Protein:</strong> <%= nut.protein %></div>
+                <div><strong>Fat:</strong> <%= nut.fat %></div>
+                <% if (nut.sugar) { %>
+                <div><strong>Sugar:</strong> <%= nut.sugar %></div>
+                <% } %> <% }) %>
+              </td>
+
+              <td>
+                <% value.recipeIngredients.forEach(ing => { %>
+                <div><strong><%= ing.title %>:</strong></div>
+                <ul>
+                  <% ing.items.forEach(item => { %>
+                  <li><%= item %></li>
+                  <% }) %>
+                </ul>
+                <% }) %>
+              </td>
+
+              <td><%= value.recipeDirections %></td>
+            </tbody>
+            <% }) %>
+
+            <!--  LOOP PRODUCTS: END  -->
+          </table>
+          <div
+            class="long-input"
+            style="align-items: flex-end; margin-bottom: 25px"
+          ></div>
+        </div>
+        <form
+          onsubmit="return validateForm()"
+          action="/admin/recipe/create"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <!-- Basic Info -->
+          <div class="form-section">
+            <h5>Basic Information</h5>
+            <div class="mb-3">
+              <label class="form-label">Recipe Name</label>
+              <input
+                type="text"
+                name="recipeName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Preparation Time (minutes)</label>
+                <input
+                  type="number"
+                  name="recipePrepTime"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Cook Time (minutes)</label>
+                <input
+                  type="number"
+                  name="recipeCookTime"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Category</label>
+              <select name="recipeType" class="form-select" required>
+                <% for (let type of Object.values(Categories)) { %>
+                <option value="<%= type %>"><%= type %></option>
+                <% } %>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Recipe Images</label>
+              <input
+                type="file"
+                name="recipeImage"
+                multiple
+                class="form-control1"
+              />
+            </div>
+          </div>
+
+          <!-- Nutrition Info -->
+          <div class="form-section">
+            <h5>Nutrition Information (in grams)</h5>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label>Calories</label>
+                <input
+                  type="text"
+                  name="recipeNutrition[calories]"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Carbs</label>
+                <input
+                  type="text"
+                  name="recipeNutrition[carbs]"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Protein</label>
+                <input
+                  type="text"
+                  name="recipeNutrition[protein]"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Fat</label>
+                <input
+                  type="text"
+                  name="recipeNutrition[fat]"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Sugar (optional)</label>
+                <input
+                  type="text"
+                  name="recipeNutrition[sugar]"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Ingredients -->
+          <div class="form-section1">
+            <h5>Ingredients</h5>
+
+            <!-- First Group -->
+            <div class="mb-3">
+              <label>Title</label>
+              <input
+                type="text"
+                name="recipeIngredients[0][title]"
+                class="form-control2"
+                value="For main dish"
+                readonly
+              />
+            </div>
+            <% for (let i = 0; i < 5; i++) { %>
+            <div class="mb-2">
+              <input
+                type="text"
+                name="recipeIngredients[0][items][]"
+                class="form-control"
+                placeholder="Main dish ingredient <%= i+1 %>"
+                required
+              />
+            </div>
+            <% } %>
+
+            <hr />
+
+            <!-- Second Group -->
+            <div class="mb-3">
+              <label>Title</label>
+              <input
+                type="text"
+                name="recipeIngredients[1][title]"
+                class="form-control2"
+                value="For the sauce"
+                readonly
+              />
+            </div>
+            <% for (let i = 0; i < 5; i++) { %>
+            <div class="mb-2">
+              <input
+                type="text"
+                name="recipeIngredients[1][items][]"
+                class="form-control"
+                placeholder="Sauce ingredient <%= i+1 %>"
+                required
+              />
+            </div>
+            <% } %>
+          </div>
+
+          <!-- Directions -->
+          <div class="form-section">
+            <h5>Cooking Directions</h5>
+            <% for (let i = 0; i < 3; i++) { %>
+            <div class="mb-3">
+              <textarea
+                name="recipeDirections[]"
+                class="form-control"
+                rows="2"
+                placeholder="Step <%= i+1 %>"
+                required
+              ></textarea>
+            </div>
+            <% } %>
+          </div>
+
+          <!-- Author -->
+          <input type="hidden" name="authorId" value="<%= authorId %>" />
+
+          <!-- Submit -->
+          <div class="text-center">
+            <button type="submit" class="btn btn-success px-5">
+              Create Recipe
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="/js/recipe.js"></script>
+</body>
+
+<%- include('includes/footer') %>

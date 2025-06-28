@@ -63,6 +63,11 @@ authorController.createAuthor = async (req: Request, res: Response) => {
     }
 
     const result = await authorService.createAuthor(newAuthor);
+    res.cookie("authorId", result._id.toString(), {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
+    });
     res.redirect("/admin/recipe/all");
   } catch (err) {
     console.log("Error, createAuthor:", err);

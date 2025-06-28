@@ -25,7 +25,8 @@ export enum Message {
   TOKEN_CREATION_FAILED = "Token creation error",
   NOT_AUTHORIZED = "Not authorized",
   IS_NOT_PARAMS_ID = "Is not params ID",
-  USED_ALREADY_AUTHOR_NICK = "Used already author nick"
+  USED_ALREADY_AUTHOR_NICK = "Used already author nick",
+  NO_AUTHOR_ID = "No author ID",
 }
 
 class Errors extends Error {

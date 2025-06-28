@@ -99,6 +99,7 @@ shefController.logout = async (req: Request, res: Response) => {
   try {
     console.log("logout");
     res.clearCookie("accessToken");
+    res.clearCookie("authorId");
     res.redirect("/admin");
   } catch (err) {
     console.log("Error. logout:", err);

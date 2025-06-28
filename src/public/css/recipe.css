@@ -9,23 +9,13 @@
   background: linear-gradient(-45deg, #110303bf, #e37813, #011c1aba, #968383);
 }
 
-
 .products-container a {
   text-decoration: none;
   color: #000000;
 }
 
-.products-container .nav {
-  display: flex;
-}
-
-.products-container .nav-item {
-  list-style: none;
-}
-
 .products-container .nav-item a {
   color: #e3c08d;
-  margin-left: 70px;
 }
 
 .products-container .nav-item a.disabled {
@@ -33,7 +23,7 @@
 }
 
 .products-container .navigation-menu {
-  position: absolute;
+  display: flex;
   z-index: 10000;
   top: 1%;
   color: #efefee;
@@ -41,34 +31,13 @@
   font-family: monospace;
 }
 
-.products-container .tbody {
-  height: 40px;
+.products-container .navigation-menu .nav {
+  display: flex;
 }
 
-.products-container .thead-light {
-  background: #495057;
-  color: white;
-  height: 50px;
-}
-
-.products-container .btn {
-  margin-top: 40px;
-  background: #4eacf9;
-  width: 139px;
-  height: 45px;
-  border: none;
-}
-
-.products-container .btn1 {
-  margin-top: 40px;
-  background: red;
-  width: 139px;
-  height: 45px;
-  border: none;
-}
-
-.products-container .table {
-  width: 100%;
+.products-container .navigation-menu .nav .nav-item {
+  margin-left: 70px;
+  list-style: none;
 }
 
 .products-container .restaurant-menu-frame {
@@ -96,7 +65,7 @@
   position: relative;
   width: 100%;
   height: auto;
-  margin-top: 100px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -144,7 +113,7 @@
   position: relative;
   margin-top: 10px;
   padding-left: 20px;
-  width: 300px;
+  width: 100%;
   height: 54px;
   border: none;
   background: #f7f7f7;
@@ -340,10 +309,20 @@
   color: #4f547b;
 }
 
+.products-container table {
+  width: 100%;
+  height: auto;
+}
+
 .products-container table td,
 table th {
+  height: 44px;
   text-align: center;
   vertical-align: middle;
+}
+
+.products-container table th {
+  background: #a2a5a9;
 }
 
 .products-container .switch {
@@ -405,42 +384,126 @@ table th {
   border-radius: 50%;
 }
 
-.products-container .interview-container {
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+.products-container .container {
+  max-width: 900px;
+  margin: auto;
+  padding-bottom: 50px;
 }
 
-.products-container .section-title {
-  font-size: 18px;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 15px;
+.products-container h2 {
+  font-weight: 700;
+  color: #343a40;
 }
 
-.products-container .interview-block {
-  margin-bottom: 20px;
+.products-container .form-section {
+  width: 700px;
+  height: 300px;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
 }
 
-.products-container .interview-label {
-  display: block;
+.products-container .form-section1 {
+  width: 700px;
+  height: 800px;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.products-container .mb-3 {
+  margin-top: 15px;
+}
+
+.products-container .form-control {
+  position: relative;
+  align-items: center;
+  height: 26px;
+  width: 168px;
+  margin-left: 10px;
+}
+
+.products-container .form-control2 {
+  border: none;
+  margin-left: 30px;
+font-size: 20px;}
+
+.products-container .form-select {
+  position: relative;
+  align-items: center;
+  height: 26px;
+  width: 168px;
+  margin-left: 10px;
+}
+
+.products-container .form-control1 {
+  position: relative;
+  align-items: center;
+  height: 26px;
+  width: 272px;
+  margin-left: 10px;
+}
+
+.products-container .form-section label {
+  font-size: 20px;
+}
+
+.products-container .form-section1 .form-control {
+  height: 35px;
+  width: 230px;
+  margin-top: 15px;
+}
+
+.products-container .form-section .form-label {
+  font-size: 25px;
+  margin-top: 25px;
+}
+
+.products-container .form-section h5 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 0.5rem;
+  color: #0d6efd;
+}
+
+.products-container label {
   font-weight: 500;
-  margin-bottom: 6px;
-  color: #333;
+  margin-bottom: 0.3rem;
 }
 
-.products-container .interview-input {
-  width: 98%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
+.products-container input.form-control,
+select.form-select,
+textarea.form-control {
+  border-radius: 0.5rem;
+  box-shadow: none;
+  transition: border-color 0.3s;
 }
 
-.products-container .interview-input:focus {
-  border-color: #7abaff;
+.products-container input.form-control:focus,
+select.form-select:focus,
+textarea.form-control:focus {
+  border-color: #0d6efd;
   outline: none;
-  box-shadow: 0 0 3px rgba(122, 186, 255, 0.5);
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+}
+
+.products-container .btn-success {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.6rem 2.5rem;
+  border-radius: 0.5rem;
+}
+
+.products-container hr {
+  margin: 2rem 0;
+  border-color: #dee2e6;
+}
+
+.products-container textarea {
+  resize: none;
 }
