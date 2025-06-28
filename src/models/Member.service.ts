@@ -1,5 +1,5 @@
 import { shapeIntoMogooseObjectId } from "../libs/config";
-import { MemberType } from "../libs/enums/member.enum";
+import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import Errors, { Message, HttpCode } from "../libs/Errors";
 import {
   Member,
@@ -34,17 +34,18 @@ class MemberService {
   }
 
   public async login(input: LoginInput): Promise<Member> {
-    // TODO: Consider member status later
     const member = await this.memberModel
       .findOne(
-        { memberNick: input.memberNick },
-        { memberNick: 1, memberPassword: 1, memberEmail: 1 }
+        {
+          memberNick: input.memberNick,
+          memberStatus: { $ne: MemberStatus.DELETE },
+        },
+        { memberNick: 1, memberPassword: 1, memberStatus: 1 }
       )
       .exec();
     if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
-
-    if (member.memberEmail !== input.memberEmail) {
-      throw new Errors(HttpCode.NOT_FOUND, Message.IS_NOT_EMAIL);
+    else if (member.memberStatus === MemberStatus.BLOCK) {
+      throw new Errors(HttpCode.FORBIDDEN, Message.BLOCKED_USER);
     }
 
     const isMatch = await bcrypt.compare(
@@ -55,11 +56,9 @@ class MemberService {
       throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
     }
 
-    const fullMember = await this.memberModel.findById(member._id).exec();
-    if (!fullMember)
-      throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
-
-    return fullMember.toObject();
+    const result = await this.memberModel.findById(member._id).exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+    return result.toObject();
   }
 
   /** BSSR ADMINKA **/
