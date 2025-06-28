@@ -10,6 +10,15 @@
   background: linear-gradient(-45deg, #110303bf, #e37813, #011c1aba, #968383);
 }
 
+.users-container .nav {
+  display: flex;
+  list-style: none;
+}
+
+.users-container .nav .nav-item {
+  margin-right: 50px;
+}
+
 .users-container a {
   text-decoration: none;
   color: #000000;
@@ -101,6 +110,22 @@
   font-size: 15px;
   line-height: 26px;
   color: #4f547b;
+}
+
+.users-container .thead-light .col {
+  background: white;
+}
+
+.users-container table {
+  width: 100%;
+}
+
+.users-container table td {
+  height: 35px;
+}
+
+.users-container table th {
+  background: rgb(163, 162, 162);
 }
 
 .users-container table td,

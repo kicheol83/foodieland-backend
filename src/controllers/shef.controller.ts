@@ -152,12 +152,12 @@ shefController.verifyAuth = async (
 };
 
 /** USER **/
-shefController.getUsers = async (req: Request, res: Response) => {
+shefController.getUsers = async (req: ExtendedRequest, res: Response) => {
   try {
     console.log("getUsers");
     const result = await memberService.getUsers();
 
-    res.json({ users: result });
+    res.render("users", { users: result, member: req.member });
   } catch (err) {
     console.log("Error. getUsers:", err);
     res.redirect("/admin/login");
