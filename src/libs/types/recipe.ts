@@ -1,6 +1,7 @@
 import { ObjectId, Types } from "mongoose";
 import { Categories } from "../enums/categories.enum";
 import { CookTime, PrepTime } from "../enums/recipe.enum";
+import { Author } from "./author";
 
 export interface Nutrition {
   calories: string;
@@ -31,6 +32,9 @@ export interface Recipe {
   authorId: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
+
+  /** from aggreation **/
+  authorData?: Author[];
 }
 
 export interface RecipeInput {
@@ -76,4 +80,12 @@ export interface RecipeUpdate {
   }[];
   recipeDirections?: string[];
   recipeVideo?: string;
+}
+
+export interface RecipeInquiry {
+  recipe: string;
+  page: number;
+  limit: number;
+  recipeType?: Categories;
+  search?: string;
 }

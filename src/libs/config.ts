@@ -7,3 +7,12 @@ export const shapeIntoMogooseObjectId = (target: any) => {
     ? new mongoose.Types.ObjectId(target)
     : target;
 };
+
+export const lookupMember = {
+  $lookup: {
+    from: "authors",
+    localField: "authorId",
+    foreignField: "_id",
+    as: "authorData",
+  },
+};

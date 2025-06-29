@@ -1,13 +1,15 @@
-import { RecipeInput, RecipeUpdate } from "../libs/types/recipe";
+import { RecipeInput, RecipeInquiry, RecipeUpdate } from "../libs/types/recipe";
 import Errors, { HttpCode } from "../libs/Errors";
 import { Message } from "../libs/Errors";
 import { RecipeModel } from "../schema/Recipe.model";
 import { Recipe } from "../libs/types/recipe";
 import { ObjectId } from "mongoose";
-import { shapeIntoMogooseObjectId } from "../libs/config";
+import { lookupMember, shapeIntoMogooseObjectId } from "../libs/config";
 import { ViewInput } from "../libs/types/view";
 import { ViewGroup } from "../libs/enums/view.enum";
 import ViewService from "./Views.service";
+import { T } from "../libs/types/common";
+import { Categories } from "../libs/enums/categories.enum";
 
 class RecipeServices {
   private readonly recipeModel;
@@ -18,6 +20,78 @@ class RecipeServices {
     this.viewService = new ViewService();
   }
 
+  /** SPA **/
+  public async getRecipes(inquiry: RecipeInquiry): Promise<Recipe[]> {
+    const match: T = { recipeType: Categories };
+
+    if (inquiry.recipeType) {
+      match.recipeType = inquiry.recipeType;
+    }
+    if (inquiry.search) {
+      match.recipeName = { $regex: new RegExp(inquiry.search, "i") };
+    }
+
+    const sort: T =
+      inquiry.recipe === "authorId"
+        ? { [inquiry.recipe]: 1 }
+        : { [inquiry.recipe]: -1 };
+
+    const result = await this.recipeModel
+      .aggregate([
+        { $match: match },
+        { $sort: sort },
+        { $skip: (inquiry.page * 1 - 1) * inquiry.limit },
+        { $limit: inquiry.limit * 1 },
+        lookupMember,
+        { $unwind: "$authorData" },
+      ])
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    return result;
+  }
+
+  public async getRecipe(
+    memberId: ObjectId | null,
+    id: string
+  ): Promise<Recipe> {
+    const recipeId = shapeIntoMogooseObjectId(id);
+
+    let result = await this.recipeModel
+      .findOne({
+        _id: recipeId,
+      })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    if (memberId) {
+      // Check Existence
+      const input: ViewInput = {
+        memberId: memberId,
+        viewRefId: recipeId,
+        viewGroup: ViewGroup.RECIPE,
+      };
+      const existView = await this.viewService.checkViewExistence(input);
+
+      console.log("existView:", !!existView);
+      if (!existView) {
+        // Insert View
+        await this.viewService.insertMemberView(input);
+
+        // Incrase View
+        result = await this.recipeModel
+          .findByIdAndUpdate(
+            recipeId,
+            { $inc: { recipeView: 1 } },
+            { new: true }
+          )
+          .exec();
+      }
+    }
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    return result.toObject();
+  }
+
+  /** BSSR **/
   public async createNewRecipe(
     author: ObjectId,
     input: RecipeInput
@@ -31,14 +105,6 @@ class RecipeServices {
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     }
   }
-
-  // public async getRecipeById(recipeId: string): Promise<Recipe> {
-  //   const recipe = shapeIntoMogooseObjectId(recipeId);
-  //   const result = await this.recipeModel.findById(recipe).exec();
-  //   if (!result)
-  //     throw new Errors(HttpCode.NOT_FOUND, Message.SOMETHING_WENT_WRONG);
-  //   return result.toObject();
-  // }
 
   public async getAllRecipe(): Promise<Recipe[]> {
     const result = await this.recipeModel.find().exec();

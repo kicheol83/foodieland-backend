@@ -6,11 +6,11 @@ import {
   LoginInput,
   Member,
   MemberInput,
+  MemberUpdate,
 } from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import AuthService from "../models/Auth.service";
 import { AUTH_TIMER } from "../libs/config";
-import { MemberType } from "../libs/enums/member.enum";
 
 const memberService = new MemberService();
 const authService = new AuthService();
@@ -53,6 +53,8 @@ memberController.login = async (req: Request, res: Response) => {
   }
 };
 
+/** ================================================== **/
+
 memberController.verifyAuth = async (
   req: ExtendedRequest,
   res: Response,
@@ -75,6 +77,24 @@ memberController.verifyAuth = async (
   }
 };
 
+memberController.retrieveAuth = async (
+  req: ExtendedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.cookies["accessUSER"];
+
+    if (token) req.member = await authService.checkAuth(token);
+
+    next();
+  } catch (err) {
+    console.log("Error, retrieveAuth:", err);
+  }
+};
+
+/** ================================================== **/
+
 memberController.logout = (req: ExtendedRequest, res: Response) => {
   try {
     console.log("logout");
@@ -86,5 +106,39 @@ memberController.logout = (req: ExtendedRequest, res: Response) => {
     else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
+
+memberController.getMemberDetail = async (
+  req: ExtendedRequest,
+  res: Response
+) => {
+  try {
+    console.log("getMemberDetail");
+    const result = await memberService.getMemberDetail(req.member);
+
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, getMemberDetail:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
+  try {
+    console.log("updateMember");
+    console.log("req.body =>", req.body);
+    const input = req.body as object as MemberUpdate;
+    if (req.file) input.memberImage = req.file.path.replace(/\\/, "/");
+    const result = await memberService.updateMember(req.member, input);
+
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, updateMember:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+
 
 export default memberController;

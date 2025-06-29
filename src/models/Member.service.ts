@@ -61,6 +61,29 @@ class MemberService {
     return result.toObject();
   }
 
+  public async getMemberDetail(member: Member): Promise<Member> {
+    const memberId = shapeIntoMogooseObjectId(member._id);
+    const result = await this.memberModel
+      .findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    return result.toObject();
+  }
+
+  public async updateMember(
+    member: Member,
+    input: MemberUpdate
+  ): Promise<Member> {
+    const memberId = shapeIntoMogooseObjectId(member._id);
+    const result = await this.memberModel
+      .findOneAndUpdate({ _id: memberId }, input, { new: true })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    return result.toObject();
+  }
+
   /** BSSR ADMINKA **/
 
   public async processSignup(input: MemberInput): Promise<Member> {
