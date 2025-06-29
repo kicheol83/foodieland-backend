@@ -5,9 +5,11 @@ import routerAdmin from "./routerAdmin";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { MORGAN_FORMAT } from "./libs/config";
+import Authrouter from "./config/auth.router";
 
 /* 1-ENTRANCE*/
 const app = express();
+app.use(Authrouter);
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

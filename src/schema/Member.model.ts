@@ -9,7 +9,7 @@ const memberSchema = new Schema(
       enum: MemberType,
       default: MemberType.USER,
     },
-    
+
     memberStatus: {
       type: String,
       enum: MemberStatus,
@@ -26,7 +26,7 @@ const memberSchema = new Schema(
     memberPhone: {
       type: String,
       index: { unique: true, sparse: true },
-      required: true,
+      required: false,
       match: [/^01[016789]-?\d{3,4}-?\d{4}$/, "Invalid Korean phone number"],
     },
     memberEmail: {

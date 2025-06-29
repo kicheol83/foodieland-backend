@@ -3,6 +3,7 @@ dotenv.config();
 
 import mongoose from "mongoose";
 import app from "./app";
+import "./config/passport";
 
 mongoose.set("strictQuery", false);
 mongoose
