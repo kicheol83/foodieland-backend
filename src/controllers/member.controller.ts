@@ -139,6 +139,35 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
+/** AUTHOR **/
+memberController.getAuthors = async (req: Request, res: Response) => {
+  try {
+    console.log("getAuthors");
+    const result = await memberService.getAuthors();
+    
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, getAllAuthors:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
 
+memberController.getAuthor = async (req: Request, res: Response) => {
+  try {
+    console.log("getAuthor");
+    const authorId = req.params.id;
+    if (!authorId)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.IS_NOT_PARAMS_ID);
 
+    console.log("getAuthor for id:", authorId);
+
+    const result = await memberService.getAuthor(authorId);
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, getAuthor:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
 export default memberController;

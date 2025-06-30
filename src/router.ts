@@ -39,4 +39,16 @@ router.get(
   recipeController.getRecipe
 );
 
+/** AUTHOR **/
+router.get(
+  "/author/all",
+  memberController.verifyAuth,
+  memberController.getAuthors
+);
+router.get(
+  "/author/:id",
+  memberController.verifyAuth,
+  memberController.getAuthor
+);
+
 export default router;

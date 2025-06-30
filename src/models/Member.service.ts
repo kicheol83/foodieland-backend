@@ -1,3 +1,4 @@
+import { Author } from "../libs/types/author";
 import { shapeIntoMogooseObjectId } from "../libs/config";
 import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import Errors, { Message, HttpCode } from "../libs/Errors";
@@ -9,12 +10,15 @@ import {
 } from "../libs/types/member";
 import MemberModel from "../schema/Member.model";
 import * as bcrypt from "bcryptjs";
+import AuthorModel from "../schema/Author.model";
 
 class MemberService {
   private readonly memberModel;
+  private readonly authorModel;
 
   constructor() {
     this.memberModel = MemberModel;
+    this.authorModel = AuthorModel;
   }
 
   /** SPA  **/
@@ -82,6 +86,22 @@ class MemberService {
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
     return result.toObject();
+  }
+
+  /** SPA: AUTHOR **/
+  public async getAuthors(): Promise<Author[]> {
+    const result = await this.authorModel.find().lean().exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    return result;
+  }
+
+  public async getAuthor(authorId: string): Promise<Author> {
+    const objectId = shapeIntoMogooseObjectId(authorId);
+    const result = await this.authorModel.findById(objectId).exec();
+    if (!result)
+      throw new Errors(HttpCode.NOT_FOUND, Message.SOMETHING_WENT_WRONG);
+    return result;
   }
 
   /** BSSR ADMINKA **/
