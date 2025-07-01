@@ -126,7 +126,7 @@
             <div class="mb-3">
               <label class="form-label">Category</label>
               <select name="recipeType" class="form-select" required>
-                <% for (let type of Object.values(Categories)) { %>
+                <% for (let type of Object.values(RecipeCategories)) { %>
                 <option value="<%= type %>"><%= type %></option>
                 <% } %>
               </select>

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { Categories } from "../libs/enums/categories.enum";
+import { RecipeCategories } from "../libs/enums/categories.enum";
 import { CookTime, PrepTime } from "../libs/enums/recipe.enum";
 
 const nutritionSchema = new Schema({
@@ -36,7 +36,7 @@ const recipeSchema = new Schema(
 
     recipeType: {
       type: String,
-      enum: Categories,
+      enum: RecipeCategories,
       required: true,
     },
 

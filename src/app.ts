@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import path from "path";
 import router from "./router";
@@ -11,12 +12,17 @@ import Authrouter from "./config/auth.router";
 const app = express();
 app.use(Authrouter);
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("./uploads"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("/uploads", express.static("./uploads"));
+app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT));
 /* 2-SESSIONS*/
+// app.use((req, res, next) => {
+//   res.locals.member = req.cookies.member;
+//   next();
+// });
 
 /* 3-VIEWS*/
 app.set("views", path.join(__dirname, "views"));

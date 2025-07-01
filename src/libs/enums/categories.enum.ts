@@ -1,4 +1,4 @@
-export enum Categories {
+export enum RecipeCategories {
   BREAKFAST = "BREAKFAST",
   VEGAN = "VEGAN",
   MEAT = "MEAT",

@@ -3,7 +3,7 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import RecipeServices from "../models/Recipe.service";
 import { RecipeInput, RecipeInquiry, RecipeUpdate } from "../libs/types/recipe";
-import { Categories } from "../libs/enums/categories.enum";
+import { RecipeCategories } from "../libs/enums/categories.enum";
 import { shapeIntoMogooseObjectId } from "../libs/config";
 import { ExtendedRequest } from "../libs/types/member";
 
@@ -22,7 +22,7 @@ recipeController.getRecipes = async (req: Request, res: Response) => {
       limit: Number(limit),
     };
     if (recipeType) {
-      inquiry.recipeType = recipeType as Categories;
+      inquiry.recipeType = recipeType as RecipeCategories;
     }
     if (search) inquiry.search = String(search);
 
@@ -52,14 +52,17 @@ recipeController.getRecipe = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
-recipeController.createNewRecipe = async (req: Request, res: Response) => {
+recipeController.createNewRecipe = async (
+  req: ExtendedRequest,
+  res: Response
+) => {
   try {
     console.log("createNewProduct");
 
     const file = req.file;
     if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
 
-    const data: RecipeInput = req.body;
+    const data = req.body as unknown as RecipeInput;
     data.recipeImage = [file.path.replace(/\\/g, "/")];
     if (typeof data.recipeIngredients === "string") {
       data.recipeIngredients = JSON.parse(data.recipeIngredients);
@@ -75,8 +78,11 @@ recipeController.createNewRecipe = async (req: Request, res: Response) => {
     if (!authorId) throw new Errors(HttpCode.BAD_REQUEST, Message.NO_AUTHOR_ID);
 
     await recipeService.createNewRecipe(authorId, data);
-
-    res.render("users", { authorId, Categories });
+    res.render("home", {
+      authorId,
+      RecipeCategories: RecipeCategories,
+      member: req.member,
+    });
   } catch (err) {
     console.log("Error, createNewProduct:", err);
     const message =
@@ -110,7 +116,11 @@ recipeController.getAllRecipe = async (req: Request, res: Response) => {
     const authorId = req.body.authorId;
     const recipe = await recipeService.getAllRecipe();
 
-    res.render("recipe", { recipe, Categories, authorId });
+    res.render("recipe", {
+      recipe,
+      RecipeCategories: RecipeCategories,
+      authorId,
+    });
   } catch (err) {
     console.log("Error, getAllRecipe:", err);
     if (err instanceof Errors) res.status(err.code).json(err);

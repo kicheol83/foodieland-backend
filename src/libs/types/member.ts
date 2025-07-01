@@ -1,6 +1,7 @@
 import { ObjectId, Types } from "mongoose";
 import { MemberStatus, MemberType } from "../enums/member.enum";
 import { Author } from "./author";
+import { RecipeInput } from "./recipe";
 
 export interface Member {
   _id: ObjectId;

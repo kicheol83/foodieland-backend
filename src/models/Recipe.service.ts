@@ -9,7 +9,6 @@ import { ViewInput } from "../libs/types/view";
 import { ViewGroup } from "../libs/enums/view.enum";
 import ViewService from "./Views.service";
 import { T } from "../libs/types/common";
-import { Categories } from "../libs/enums/categories.enum";
 
 class RecipeServices {
   private readonly recipeModel;
@@ -22,7 +21,7 @@ class RecipeServices {
 
   /** SPA **/
   public async getRecipes(inquiry: RecipeInquiry): Promise<Recipe[]> {
-    const match: T = { recipeType: Categories };
+    const match: T = {};
 
     if (inquiry.recipeType) {
       match.recipeType = inquiry.recipeType;
