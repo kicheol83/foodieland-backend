@@ -9,7 +9,6 @@
   background: linear-gradient(-45deg, #110303bf, #e37813, #011c1aba, #968383);
 }
 
-
 .products-container a {
   text-decoration: none;
   color: #000000;
@@ -114,6 +113,7 @@
 }
 
 .products-container .new-dish-txt {
+  margin-top: 81px;
   font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: 400;

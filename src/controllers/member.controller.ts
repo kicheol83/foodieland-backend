@@ -40,7 +40,7 @@ memberController.login = async (req: Request, res: Response) => {
       result = await memberService.login(input),
       token = await authService.createToken(result);
 
-    res.cookie("accessUSER", token, {
+    res.cookie("accessToken", token, {
       maxAge: AUTH_TIMER * 3600 * 1000,
       httpOnly: false,
     });
@@ -61,7 +61,9 @@ memberController.verifyAuth = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.cookies["accessUSER"];
+    // const token = req.cookies["accessUSER"];
+    const token = req.cookies["accessToken"];
+
     if (!token) {
       throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
     }
@@ -83,7 +85,7 @@ memberController.retrieveAuth = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.cookies["accessUSER"];
+    const token = req.cookies["accessToken"];
 
     if (token) req.member = await authService.checkAuth(token);
 
@@ -98,7 +100,7 @@ memberController.retrieveAuth = async (
 memberController.logout = (req: ExtendedRequest, res: Response) => {
   try {
     console.log("logout");
-    res.cookie("accessUSER", null, { maxAge: 0, httpOnly: true });
+    res.cookie("accessToken", null, { maxAge: 0, httpOnly: true });
     res.status(HttpCode.OK).json({ logout: true });
   } catch (err) {
     console.log("Error, login:", err);
@@ -144,7 +146,7 @@ memberController.getAuthors = async (req: Request, res: Response) => {
   try {
     console.log("getAuthors");
     const result = await memberService.getAuthors();
-    
+
     res.status(HttpCode.OK).json(result);
   } catch (err) {
     console.log("Error, getAllAuthors:", err);
@@ -166,6 +168,19 @@ memberController.getAuthor = async (req: Request, res: Response) => {
     res.status(HttpCode.OK).json(result);
   } catch (err) {
     console.log("Error, getAuthor:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+/** Google Auth Logic **/
+
+memberController.getMe = async (req: ExtendedRequest, res: Response) => {
+  try {
+    const member = req.member;
+    res.json({ member });
+  } catch (err) {
+    console.log("Error, getMe:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }

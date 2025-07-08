@@ -5,6 +5,7 @@ import makeUploader from "./libs/utils/uploader";
 import authorController from "./controllers/author.controller";
 import recipeController from "./controllers/recipe.controller";
 import likeController from "./controllers/like.controller";
+import memberController from "./controllers/member.controller";
 
 /* Shef */
 routerAdmin.get("/", shefController.goHome);
@@ -92,7 +93,7 @@ routerAdmin.post(
 /** LIKE **/
 routerAdmin.post(
   "/recipe/like/:id",
-  shefController.verifyAuth,
+  memberController.verifyAuth,
   likeController.toggleRecipeLike
 );
 

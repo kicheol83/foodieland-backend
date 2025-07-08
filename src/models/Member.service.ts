@@ -29,6 +29,7 @@ class MemberService {
 
     try {
       const result = await this.memberModel.create(input);
+      console.log("result =>", result);
       result.memberPassword = "";
       return result.toObject();
     } catch (err) {
@@ -107,23 +108,16 @@ class MemberService {
   /** BSSR ADMINKA **/
 
   public async processSignup(input: MemberInput): Promise<Member> {
-    const exist = await this.memberModel
-      .findOne({
-        memberType: MemberType.SHEF,
-      })
-      .exec();
-
-    if (!exist) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
-    const salt = await bcrypt.genSalt();
-    input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
-    console.log("password:", input.memberPassword);
-
     try {
+      const salt = await bcrypt.genSalt();
+      input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
+      console.log("password:", input.memberPassword);
+
       const result = await this.memberModel.create(input);
       result.memberPassword = "";
       return result.toObject();
     } catch (err) {
-      console.log("rocessSignup:", err);
+      console.log("processSignup error:", err);
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     }
   }

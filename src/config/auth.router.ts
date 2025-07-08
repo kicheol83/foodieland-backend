@@ -31,7 +31,7 @@ Authrouter.get(
 
       const token = await authService.createToken(tokenPayload);
 
-      res.cookie("accessTOKEN", token, {
+      res.cookie("accessToken", token, {
         maxAge: AUTH_TIMER * 3600 * 1000,
         httpOnly: false,
       });

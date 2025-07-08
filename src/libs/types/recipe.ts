@@ -23,7 +23,7 @@ export interface Recipe {
   recipeCookTime: CookTime;
   recipeType: RecipeCategories;
   recipeImage: string[];
-  recipeNutrition: Nutrition;
+  recipeNutrition: Nutrition[];
   recipeIngredients: Ingredient[];
   recipeDirections: string[];
   recipeView?: number;
