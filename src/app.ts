@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import { MORGAN_FORMAT } from "./libs/config";
 import Authrouter from "./config/auth.router";
 
+
 /* 1-ENTRANCE*/
 const app = express();
 app.use(Authrouter);
@@ -32,5 +33,7 @@ app.set("view engine", "ejs");
 // SSR: EJS ADMIKA
 app.use("/admin", routerAdmin); // SSR: EJS
 app.use("/", router); // SPA: REACT
+
+
 
 export default app;
