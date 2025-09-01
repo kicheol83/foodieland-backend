@@ -2,7 +2,7 @@ import { ObjectId } from "mongoose";
 import { shapeIntoMogooseObjectId } from "../libs/config";
 import LikeModel from "../schema/Like.model";
 import { RecipeModel } from "../schema/Recipe.model";
-import { LikeGroup } from "../libs/enums/like.enum";
+import { LikeGroup } from "../libs/enums/Like.enum";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 
 class LikeService {
