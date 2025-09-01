@@ -4,4 +4,4 @@ dist
 .env
 .env.production
 
-uploads
+uploads/
