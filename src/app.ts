@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 import { MORGAN_FORMAT } from "./libs/config";
 import Authrouter from "./config/auth.router";
 
-
 /* 1-ENTRANCE*/
 const app = express();
 app.use(Authrouter);
@@ -16,7 +15,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static("./uploads"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({ credentials: true, origin: ["http://72.60.107.80:3015"] }));
 app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT));
 /* 2-SESSIONS*/
@@ -33,7 +32,5 @@ app.set("view engine", "ejs");
 // SSR: EJS ADMIKA
 app.use("/admin", routerAdmin); // SSR: EJS
 app.use("/", router); // SPA: REACT
-
-
 
 export default app;
