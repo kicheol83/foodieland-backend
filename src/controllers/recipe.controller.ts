@@ -16,11 +16,13 @@ recipeController.getRecipes = async (req: Request, res: Response) => {
   try {
     console.log("getProducts");
     const { page, limit, recipe, recipeType, search } = req.query;
+
     const inquiry: RecipeInquiry = {
-      recipe: String(recipe),
-      page: Number(page),
-      limit: Number(limit),
+      recipe: String(recipe || ""),
+      page: parseInt(page as string) || 1,
+      limit: parseInt(limit as string) || 10,
     };
+
     if (recipeType) {
       inquiry.recipeType = recipeType as RecipeCategories;
     }
