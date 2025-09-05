@@ -25,7 +25,7 @@ mongoose
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
-    origin: ["http://foodieland.uz:3015"],
+    origin: "http://foodieland.uz",
     credentials: true,
   },
 });
